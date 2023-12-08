@@ -6,7 +6,6 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.verify
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,7 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
-import org.springframework.test.web.servlet.put
 
 @ExtendWith(SpringExtension::class)
 @WebMvcTest
@@ -45,7 +43,8 @@ class BookControllerIT {
                         [
                           {
                             "name": "A",
-                            "author": "B"
+                            "author": "B",
+                            "reserved": false
                           }
                         ]
                     """.trimIndent()
@@ -62,7 +61,8 @@ class BookControllerIT {
             content = """
                 {
                   "name": "Les_misérables",
-                  "author": "Victor_Hugo"
+                  "author": "Victor_Hugo",
+                  "reserved": false
                 }
             """.trimIndent()
             contentType = APPLICATION_JSON
@@ -73,7 +73,8 @@ class BookControllerIT {
 
         val expected = Book(
             name = "Les_misérables",
-            author = "Victor_Hugo"
+            author = "Victor_Hugo",
+            reserved = false
         )
 
         verify(exactly = 1) { bookUseCase.addBook(expected) }
@@ -88,7 +89,8 @@ class BookControllerIT {
             content = """
                 {
                   "title": "Les_misérables",
-                  "author": "Victor_Hugo"
+                  "author": "Victor_Hugo",
+                  "reserved": false
                 }
             """.trimIndent()
             contentType = APPLICATION_JSON
@@ -104,13 +106,13 @@ class BookControllerIT {
     fun `rest route for reservation status update`() {
         justRun { bookUseCase.reserve(any()) }
 
-        val bookName = "Les_miserables"
+        val bookName = "Les_misérables"
 
         mockMvc.post("/books/$bookName/reserve") {
             // language=json
             content = """
                 {
-                  "name": "Les_miserables",
+                  "name": "Les_misérables",
                   "author": "Victor_Hugo",
                   "reserved": true
                 }
@@ -129,42 +131,5 @@ class BookControllerIT {
 
         verify(exactly = 1) { bookUseCase.reserve(expected) }
     }
-/*
-    @Test
-    fun `test`() {
-        // GIVEN
-        justRun { bookUseCase.addBook(Book("Les_misérables","Victor_Hugo")) }
-
-        // WHEN
-        mockMvc.post("/books") {
-            // language=json
-            content = """
-                {
-                  "name": "Les_misérables",
-                  "author": "Victor_Hugo",
-                  "reserved": false
-                }
-            """.trimIndent()
-            contentType = APPLICATION_JSON
-            accept = APPLICATION_JSON
-        }
-        justRun { bookUseCase.reserve(Book("Les_misérables","Victor_Hugo")) }
-
-        mockMvc.post("/books") {
-            // language=json
-            content = """
-                {
-                  "name": "Les_misérables",
-                  "author": "Victor_Hugo",
-                  "reserved": true
-                }
-            """.trimIndent()
-            contentType = APPLICATION_JSON
-            accept = APPLICATION_JSON
-        }.andExpect {
-            status { isCreated() }
-        }
-
-    }*/
 
 }
