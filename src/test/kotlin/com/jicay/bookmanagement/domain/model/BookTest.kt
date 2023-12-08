@@ -13,7 +13,7 @@ class BookTest {
     fun emptyTitle(){
         //Arrange
         val name: String = ""
-        val author: String = "Charles Perrault"
+        val author: String = "Charles_Perrault"
 
         //Act & Assert
         assertFailure { Book(name, author) }
@@ -25,7 +25,7 @@ class BookTest {
     @Test
     fun emptyAuthor(){
         //Arrange
-        val name: String = "Le Petit Chaperon Rouge"
+        val name: String = "Le_Petit_Chaperon_Rouge"
         val author: String = ""
 
         //Act & Assert
@@ -37,8 +37,8 @@ class BookTest {
     @Test
     fun defaultReserved(){
         //Arrange
-        val name: String = "Le Petit Chaperon Rouge"
-        val author: String = "Charles Perrault"
+        val name: String = "Le_Petit_Chaperon_Rouge"
+        val author: String = "Charles_Perrault"
 
         //Act & Assert
         assertThat(Book(name, author).reserved).isEqualTo(false)
@@ -46,8 +46,8 @@ class BookTest {
     @Test
     fun reserved(){
         //Arrange
-        val name: String = "Le Petit Chaperon Rouge"
-        val author: String = "Charles Perrault"
+        val name: String = "Le_Petit_Chaperon_Rouge"
+        val author: String = "Charles_Perrault"
         val reserved: Boolean = true
 
         //Act & Assert

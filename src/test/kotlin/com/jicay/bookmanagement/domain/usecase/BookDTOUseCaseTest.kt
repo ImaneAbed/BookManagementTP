@@ -27,15 +27,15 @@ class BookDTOUseCaseTest {
     @Test
     fun `get all books should returns all books sorted by name`() {
         every { bookPort.getAllBooks() } returns listOf(
-            Book("Les Misérables", "Victor Hugo"),
-            Book("Hamlet", "William Shakespeare")
+            Book("Les_Misérables", "Victor_Hugo"),
+            Book("Hamlet", "William_Shakespeare")
         )
 
         val res = bookUseCase.getAllBooks()
 
         assertThat(res).containsExactly(
-            Book("Hamlet", "William Shakespeare"),
-            Book("Les Misérables", "Victor Hugo")
+            Book("Hamlet", "William_Shakespeare"),
+            Book("Les_Misérables", "Victor_Hugo")
         )
     }
 
@@ -43,7 +43,7 @@ class BookDTOUseCaseTest {
     fun `add book`() {
         justRun { bookPort.createBook(any()) }
 
-        val book = Book("Les Misérables", "Victor Hugo")
+        val book = Book("Les_Misérables", "Victor_Hugo")
 
         bookUseCase.addBook(book)
 
@@ -54,7 +54,7 @@ class BookDTOUseCaseTest {
     fun `reserve should return true and set reserved to true if the book is not already reserved`() {
         justRun { bookPort.updateBook(any()) }
 
-        val book = Book("Les Misérables", "Victor Hugo")
+        val book = Book("Les_Misérables", "Victor_Hugo")
         val res = bookUseCase.reserve(book)
 
         assertTrue(book.reserved)
@@ -67,7 +67,7 @@ class BookDTOUseCaseTest {
     fun `reserve should return false if the book is already reserved`() {
         justRun { bookPort.updateBook(any()) }
 
-        val book = Book("Les Misérables", "Victor Hugo", reserved = true)
+        val book = Book("Les_Misérables", "Victor_Hugo", reserved = true)
         val res = bookUseCase.reserve(book)
 
         assertTrue(book.reserved)
