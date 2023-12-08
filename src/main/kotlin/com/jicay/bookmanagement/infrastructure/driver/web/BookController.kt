@@ -26,7 +26,7 @@ class BookController(
     }
 
     @CrossOrigin
-    @PostMapping
+    @PutMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun reserve(@RequestBody bookDTO: BookDTO): Boolean {
         if (!bookDTO.reserved){

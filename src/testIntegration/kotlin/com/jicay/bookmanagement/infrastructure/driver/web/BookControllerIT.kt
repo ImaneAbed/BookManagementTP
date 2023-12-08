@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 
 @ExtendWith(SpringExtension::class)
 @WebMvcTest
@@ -97,4 +98,34 @@ class BookControllerIT {
 
         verify(exactly = 0) { bookUseCase.addBook(any()) }
     }
+
+    @Test
+    fun `rest route for reservation status update`() {
+        justRun { bookUseCase.addBook(any()) }
+
+        val bookName = "Les misérables"
+
+        mockMvc.post("/books$bookName") {
+            // language=json
+            content = """
+                {
+                  "name": "Les misérables",
+                  "author": "Victor Hugo"
+                }
+            """.trimIndent()
+            contentType = APPLICATION_JSON
+            accept = APPLICATION_JSON
+        }.andExpect {
+            status { isCreated() }
+        }
+
+        val expected = Book(
+            name = "Les misérables",
+            author = "Victor Hugo",
+            reserved = true
+        )
+
+        verify(exactly = 1) { bookUseCase.reserve(expected) }
+    }
+
 }
