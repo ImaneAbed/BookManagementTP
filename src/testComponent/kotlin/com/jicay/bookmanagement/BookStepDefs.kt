@@ -23,29 +23,8 @@ class BookStepDefs {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails()
     }
 
-    @When("the user creates the book {string} written by {string} with reserved status {boolean}")
-    fun createBook(title: String, author: String, reserved: Boolean) {
-        given()
-            .contentType(ContentType.JSON)
-            .and()
-            .body(
-                """
-                {
-                  "name": "$title",
-                  "author": "$author",
-                  "reserved": $reserved
-                }
-            """.trimIndent()
-            )
-            .`when`()
-            .post("/books")
-            .then()
-            .statusCode(201)
-    }
-/*
-
-    @When("the user creates the book {string} written by {string} and reserved is {boolean}")
-    fun createBook(title: String, author: String, reserved: Boolean) {
+    @When("the user creates the book {string} written by {string} reserved is {string}")
+    fun createBook(title: String, author: String, reserved: String) {
         given()
             .contentType(ContentType.JSON)
             .and()
@@ -54,7 +33,7 @@ class BookStepDefs {
                     {
                       "name": "$title",
                       "author": "$author",
-                      "reserved": $reserved
+                      "reserved": "$reserved"
                     }
                 """.trimIndent()
             )
@@ -62,7 +41,7 @@ class BookStepDefs {
             .post("/books")
             .then()
             .statusCode(201)
-    }*/
+    }
 
     @When("the user get all books")
     fun getAllBooks() {
@@ -78,10 +57,10 @@ class BookStepDefs {
         val expectedResponse = payload.joinToString(separator = ",", prefix = "[", postfix = "]") { line ->
             """
                 ${
-                    line.entries.joinToString(separator = ",", prefix = "{", postfix = "}") {
-                        """"${it.key}": "${it.value}""""
-                    }
+                line.entries.joinToString(separator = ",", prefix = "{", postfix = "}") {
+                    """"${it.key}": "${it.value}""""
                 }
+            }
             """.trimIndent()
 
         }
