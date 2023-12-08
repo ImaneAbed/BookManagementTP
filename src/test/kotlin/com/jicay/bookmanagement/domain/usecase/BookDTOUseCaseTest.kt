@@ -52,23 +52,25 @@ class BookDTOUseCaseTest {
 
     @Test
     fun `reserve should return true and set reserved to true if the book is not already reserved`() {
+        justRun { bookPort.updateBook(any()) }
+
         val book = Book("Les Misérables", "Victor Hugo")
-        every { bookPort.getAllBooks() } returns listOf(book)
+        val res = bookUseCase.reserve(book)
 
-        val result = bookUseCase.reserve(book)
-
-        assertTrue(result)
         assertTrue(book.reserved)
+        assertTrue(res)
+
     }
+
 
     @Test
     fun `reserve should return false if the book is already reserved`() {
-        val reservedBook = Book("Hamlet", "William Shakespeare", reserved = true)
-        every { bookPort.getAllBooks() } returns listOf(reservedBook)
+        justRun { bookPort.updateBook(any()) }
 
-        val result = bookUseCase.reserve(reservedBook)
+        val book = Book("Les Misérables", "Victor Hugo", reserved = true)
+        val res = bookUseCase.reserve(book)
 
-        assertFalse(result)
-        assertTrue(reservedBook.reserved)
+        assertTrue(book.reserved)
+        assertFalse(res)
     }
 }
