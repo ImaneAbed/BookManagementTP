@@ -60,8 +60,8 @@ class BookControllerIT {
             // language=json
             content = """
                 {
-                  "name": "Les misérables",
-                  "author": "Victor Hugo"
+                  "name": "Les_misérables",
+                  "author": "Victor_Hugo"
                 }
             """.trimIndent()
             contentType = APPLICATION_JSON
@@ -71,8 +71,8 @@ class BookControllerIT {
         }
 
         val expected = Book(
-            name = "Les misérables",
-            author = "Victor Hugo"
+            name = "Les_misérables",
+            author = "Victor_Hugo"
         )
 
         verify(exactly = 1) { bookUseCase.addBook(expected) }
@@ -86,8 +86,8 @@ class BookControllerIT {
             // language=json
             content = """
                 {
-                  "title": "Les misérables",
-                  "author": "Victor Hugo"
+                  "title": "Les_misérables",
+                  "author": "Victor_Hugo"
                 }
             """.trimIndent()
             contentType = APPLICATION_JSON
@@ -103,14 +103,14 @@ class BookControllerIT {
     fun `rest route for reservation status update`() {
         justRun { bookUseCase.addBook(any()) }
 
-        val bookName = "Les misérables"
+        val bookName = "Les_misérables"
 
         mockMvc.post("/books$bookName") {
             // language=json
             content = """
                 {
-                  "name": "Les misérables",
-                  "author": "Victor Hugo"
+                  "name": "Les_misérables",
+                  "author": "Victor_Hugo"
                 }
             """.trimIndent()
             contentType = APPLICATION_JSON
@@ -120,8 +120,8 @@ class BookControllerIT {
         }
 
         val expected = Book(
-            name = "Les misérables",
-            author = "Victor Hugo",
+            name = "Les_misérables",
+            author = "Victor_Hugo",
             reserved = true
         )
 

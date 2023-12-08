@@ -48,8 +48,8 @@ class BookDAOIT {
                insert into book (title, author)
                values 
                    ('Hamlet', 'Shakespeare'),
-                   ('Les fleurs du mal', 'Beaudelaire'),
-                   ('Harry Potter', 'Rowling');
+                   ('Les_fleurs_du_mal', 'Beaudelaire'),
+                   ('Harry_Potter', 'Rowling');
             """.trimIndent())
 
         // WHEN
@@ -58,8 +58,8 @@ class BookDAOIT {
         // THEN
         assertThat(res).containsExactlyInAnyOrder(
             Book("Hamlet", "Shakespeare"),
-            Book("Les fleurs du mal", "Beaudelaire"),
-            Book("Harry Potter", "Rowling")
+            Book("Les_fleurs_du_mal", "Beaudelaire"),
+            Book("Harry_Potter", "Rowling")
         )
     }
 
@@ -67,7 +67,7 @@ class BookDAOIT {
     fun `create book in db`() {
         // GIVEN
         // WHEN
-        bookDAO.createBook(Book("Les misérables", "Victor Hugo"))
+        bookDAO.createBook(Book("Les_misérables", "Victor_Hugo"))
 
         // THEN
         val res = performQuery(
@@ -78,8 +78,8 @@ class BookDAOIT {
         assertThat(res.size).isEqualTo(1)
         assertThat(res[0]["id"]).isNotNull()
         assertThat(res[0]["id"] is Int).isTrue()
-        assertThat(res[0]["title"]).isEqualTo("Les misérables")
-        assertThat(res[0]["author"]).isEqualTo("Victor Hugo")
+        assertThat(res[0]["title"]).isEqualTo("Les_misérables")
+        assertThat(res[0]["author"]).isEqualTo("Victor_Hugo")
     }
 
     protected fun performQuery(sql: String): List<Map<String, Any>> {
