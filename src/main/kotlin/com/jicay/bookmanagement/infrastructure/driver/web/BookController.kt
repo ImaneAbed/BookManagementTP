@@ -26,7 +26,7 @@ class BookController(
     }
 
     @CrossOrigin
-    @PutMapping("/{bookName}/reserve")
+    @PostMapping("/{bookName}/reserve")
     @ResponseStatus(HttpStatus.CREATED)
     fun reserve(@RequestBody bookDTO: BookDTO): Boolean {
         return bookUseCase.reserve(bookDTO.toDomain())

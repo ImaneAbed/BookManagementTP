@@ -6,6 +6,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.verify
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -101,15 +102,16 @@ class BookControllerIT {
 
     @Test
     fun `rest route for reservation status update`() {
+        justRun { bookUseCase.addBook(any()) }
         justRun { bookUseCase.reserve(any()) }
 
-        val bookName = "Les_misérables"
+        val bookName = "Les_miserables"
 
-        mockMvc.put("/books/$bookName") {
+        mockMvc.post("/books/$bookName/reserve") {
             // language=json
             content = """
                 {
-                  "name": "Les_misérables",
+                  "name": "Les_miserables",
                   "author": "Victor_Hugo",
                   "reserved": true
                 }
@@ -128,5 +130,42 @@ class BookControllerIT {
 
         verify(exactly = 1) { bookUseCase.reserve(expected) }
     }
+/*
+    @Test
+    fun `test`() {
+        // GIVEN
+        justRun { bookUseCase.addBook(Book("Les_misérables","Victor_Hugo")) }
+
+        // WHEN
+        mockMvc.post("/books") {
+            // language=json
+            content = """
+                {
+                  "name": "Les_misérables",
+                  "author": "Victor_Hugo",
+                  "reserved": false
+                }
+            """.trimIndent()
+            contentType = APPLICATION_JSON
+            accept = APPLICATION_JSON
+        }
+        justRun { bookUseCase.reserve(Book("Les_misérables","Victor_Hugo")) }
+
+        mockMvc.post("/books") {
+            // language=json
+            content = """
+                {
+                  "name": "Les_misérables",
+                  "author": "Victor_Hugo",
+                  "reserved": true
+                }
+            """.trimIndent()
+            contentType = APPLICATION_JSON
+            accept = APPLICATION_JSON
+        }.andExpect {
+            status { isCreated() }
+        }
+
+    }*/
 
 }
