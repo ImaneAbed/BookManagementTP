@@ -101,16 +101,17 @@ class BookControllerIT {
 
     @Test
     fun `rest route for reservation status update`() {
-        justRun { bookUseCase.addBook(any()) }
+        justRun { bookUseCase.reserve(any()) }
 
         val bookName = "Les_misérables"
 
-        mockMvc.post("/books$bookName") {
+        mockMvc.put("/books/$bookName") {
             // language=json
             content = """
                 {
                   "name": "Les_misérables",
-                  "author": "Victor_Hugo"
+                  "author": "Victor_Hugo",
+                  "reserved": true
                 }
             """.trimIndent()
             contentType = APPLICATION_JSON

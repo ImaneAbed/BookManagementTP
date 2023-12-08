@@ -22,6 +22,8 @@
             <column name="author" type="varchar">
                 <constraints nullable="false" />
             </column>
+            <column name="reserved" type="boolean">
+            </column>
         </createTable>
 
         <addPrimaryKey columnNames="id" tableName="book" />

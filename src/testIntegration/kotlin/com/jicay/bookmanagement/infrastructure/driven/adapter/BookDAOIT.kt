@@ -47,11 +47,11 @@ class BookDAOIT {
         performQuery(
             // language=sql
             """
-               insert into book (title, author)
+               insert into book (title, author, reserved)
                values 
-                   ('Hamlet', 'Shakespeare'),
-                   ('Les_fleurs_du_mal', 'Beaudelaire'),
-                   ('Harry_Potter', 'Rowling');
+                   ('Hamlet', 'Shakespeare', false),
+                   ('Les_fleurs_du_mal', 'Beaudelaire', false),
+                   ('Harry_Potter', 'Rowling', false);
             """.trimIndent())
 
         // WHEN
