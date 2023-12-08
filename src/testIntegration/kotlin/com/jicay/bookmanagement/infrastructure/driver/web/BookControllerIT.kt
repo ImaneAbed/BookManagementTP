@@ -102,7 +102,6 @@ class BookControllerIT {
 
     @Test
     fun `rest route for reservation status update`() {
-        justRun { bookUseCase.addBook(any()) }
         justRun { bookUseCase.reserve(any()) }
 
         val bookName = "Les_miserables"

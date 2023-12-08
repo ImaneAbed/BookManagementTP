@@ -1,7 +1,10 @@
 package com.jicay.bookmanagement.domain.usecase
 
+import assertk.assertFailure
 import assertk.assertThat
 import assertk.assertions.containsExactly
+import assertk.assertions.hasMessage
+import assertk.assertions.isInstanceOf
 import com.jicay.bookmanagement.domain.model.Book
 import com.jicay.bookmanagement.domain.port.BookPort
 import io.mockk.every
@@ -55,10 +58,10 @@ class BookDTOUseCaseTest {
         justRun { bookPort.updateBook(any()) }
 
         val book = Book("Les_Misérables", "Victor_Hugo")
-        val res = bookUseCase.reserve(book)
+        bookUseCase.reserve(book)
 
         assertTrue(book.reserved)
-        assertTrue(res)
+        verify(exactly = 1) { bookPort.updateBook(book) }
 
     }
 
@@ -68,9 +71,9 @@ class BookDTOUseCaseTest {
         justRun { bookPort.updateBook(any()) }
 
         val book = Book("Les_Misérables", "Victor_Hugo", reserved = true)
-        val res = bookUseCase.reserve(book)
 
-        assertTrue(book.reserved)
-        assertFalse(res)
+        assertFailure { bookUseCase.reserve(book) }
+            .isInstanceOf(Exception::class)
+            .hasMessage("already reserved")
     }
 }

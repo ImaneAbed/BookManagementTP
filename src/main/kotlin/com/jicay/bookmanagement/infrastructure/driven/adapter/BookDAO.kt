@@ -28,7 +28,7 @@ class BookDAO(private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate
             ))
     }
 
-    override fun updateBook(book: Book): Boolean {
+    override fun updateBook(book: Book){
         if (!book.reserved) {
             namedParameterJdbcTemplate
                 .update(
@@ -37,9 +37,7 @@ class BookDAO(private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate
                         "reserved" to book.reserved
                     )
                 )
-            return true
         }
-        return false
     }
 
 }

@@ -16,11 +16,13 @@ class BookUseCase(
         bookPort.createBook(book)
     }
 
-    fun reserve(book: Book): Boolean{
+    fun reserve(book: Book){
         if (!book.reserved) {
             book.reserved = true
-            return true
+            bookPort.updateBook(book)
         }
-        return false
+        else{
+            throw Exception("already reserved")
+        }
     }
 }
