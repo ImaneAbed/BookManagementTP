@@ -51,6 +51,6 @@ class BookTest {
         val reserved: Boolean = true
 
         //Act & Assert
-        assertThat(Book(name, author, reserved).reserved).isEqualTo(reserved)
+        assertThat((Book(name, author, reserved)).reserved).isEqualTo(reserved)
     }
 }
