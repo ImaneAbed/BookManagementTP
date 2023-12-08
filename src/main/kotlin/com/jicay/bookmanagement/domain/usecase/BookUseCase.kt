@@ -15,4 +15,12 @@ class BookUseCase(
     fun addBook(book: Book) {
         bookPort.createBook(book)
     }
+
+    fun reserve(book: Book): Boolean{
+        if (!book.reserved) {
+            book.reserved = true
+            return true
+        }
+        return false
+    }
 }

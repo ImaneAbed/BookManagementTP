@@ -10,6 +10,8 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.justRun
 import io.mockk.verify
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -46,5 +48,27 @@ class BookDTOUseCaseTest {
         bookUseCase.addBook(book)
 
         verify(exactly = 1) { bookPort.createBook(book) }
+    }
+
+    @Test
+    fun `reserve should return true and set reserved to true if the book is not already reserved`() {
+        val book = Book("Les Misérables", "Victor Hugo")
+        every { bookPort.getAllBooks() } returns listOf(book)
+
+        val result = bookUseCase.reserve(book)
+
+        assertTrue(result)
+        assertTrue(book.reserved)
+    }
+
+    @Test
+    fun `reserve should return false if the book is already reserved`() {
+        val reservedBook = Book("Hamlet", "William Shakespeare", reserved = true)
+        every { bookPort.getAllBooks() } returns listOf(reservedBook)
+
+        val result = bookUseCase.reserve(reservedBook)
+
+        assertFalse(result)
+        assertTrue(reservedBook.reserved)
     }
 }
