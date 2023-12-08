@@ -25,6 +25,8 @@ class BookStepDefs {
 
     @When("the user creates the book {string} written by {string} reserved is {string}")
     fun createBook(title: String, author: String, reserved: String) {
+        val isReserved: Boolean = convertToBoolean(reserved)
+        
         given()
             .contentType(ContentType.JSON)
             .and()
@@ -33,7 +35,7 @@ class BookStepDefs {
                     {
                       "name": "$title",
                       "author": "$author",
-                      "reserved": "$reserved"
+                      "reserved": $isReserved
                     }
                 """.trimIndent()
             )
@@ -41,6 +43,14 @@ class BookStepDefs {
             .post("/books")
             .then()
             .statusCode(201)
+    }
+
+    private fun convertToBoolean(value: String): Boolean {
+        return when (value.toLowerCase()) {
+            "true" -> true
+            "false" -> false
+            else -> throw IllegalArgumentException("Invalid boolean value: $value")
+        }
     }
 
     @When("the user get all books")
@@ -52,8 +62,8 @@ class BookStepDefs {
             .statusCode(200)
     }
 
-    @Then("the list should contains the following books in the same order")
-    fun shouldHaveListOfBooks(payload: List<Map<String, Any>>) {
+    /*@Then("athe list should contains the following books in the same order")
+    fun ashouldHaveListOfBooks(payload: List<Map<String, Any>>) {
         val expectedResponse = payload.joinToString(separator = ",", prefix = "[", postfix = "]") { line ->
             """
                 ${
@@ -67,6 +77,17 @@ class BookStepDefs {
         assertThat(lastBookResult.extract().body().jsonPath().prettify())
             .isEqualTo(JsonPath(expectedResponse).prettify())
 
+    }*/
+
+    @Then("the list should contains the following books in the same order")
+    fun shouldHaveListOfBooks(payload: List<Map<String, Any>>) {
+        val actualBooks = lastBookResult.extract().body().jsonPath().getList("", Map::class.java)
+        for ((index, expectedBook) in payload.withIndex()) {
+            val actualBook = actualBooks[index] as Map<*, *>
+            assertThat(actualBook["name"]).isEqualTo(expectedBook["name"])
+            assertThat(actualBook["author"]).isEqualTo(expectedBook["author"])
+            assertThat(actualBook["reserved"]).isEqualTo(expectedBook["reserved"].toString().toBoolean())
+        }
     }
 
     companion object {
