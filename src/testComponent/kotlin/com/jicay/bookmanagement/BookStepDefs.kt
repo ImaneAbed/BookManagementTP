@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import io.cucumber.java.Before
 import io.cucumber.java.Scenario
+import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.restassured.RestAssured
@@ -23,9 +24,9 @@ class BookStepDefs {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails()
     }
 
-    @When("the user creates the book {string} written by {string} reserved is {string}")
-    fun createBook(title: String, author: String, reserved: String) {
-        val isReserved: Boolean = convertToBoolean(reserved)
+    @When("the user creates the book {string} written by {string}")
+    fun createBook(title: String, author: String) {
+        //val isReserved: Boolean = convertToBoolean(reserved)
         
         given()
             .contentType(ContentType.JSON)
@@ -35,7 +36,7 @@ class BookStepDefs {
                     {
                       "name": "$title",
                       "author": "$author",
-                      "reserved": $isReserved
+                      "reserved": false
                     }
                 """.trimIndent()
             )
@@ -45,13 +46,64 @@ class BookStepDefs {
             .statusCode(201)
     }
 
-    private fun convertToBoolean(value: String): Boolean {
-        return when (value.toLowerCase()) {
-            "true" -> true
-            "false" -> false
-            else -> throw IllegalArgumentException("Invalid boolean value: $value")
-        }
-    }
+
+    /*Scenario: user reserves a book
+    Given the user has the book "Les Misérables" in the library
+    When the user reserves the book "Les Misérables"
+    Then the book "Les Misérables" should be marked as reserved
+*/
+
+
+    /*
+    @Given("the user has the book {string} in the library")
+    fun givenUserHasBookInTheLibrary(title: String) {
+        // Logique pour s'assurer que le livre spécifié existe dans la bibliothèque
+        // Cela pourrait inclure l'ajout du livre à la bibliothèque si nécessaire
+        createBook(title, "Auteur par défaut", false) // Créez le livre avec l'auteur par défaut et non réservé
+    }*/
+
+/*
+    @When("the user reserve the book {string}")
+    fun updateBook(title: String, author: String, reserved: Boolean) {
+        //val isReserved: Boolean = convertToBoolean(reserved)
+
+        given()
+            .contentType(ContentType.JSON)
+            .and()
+            .body(
+                """
+                    {
+                      "name": "$title",
+                      "author": "$author",
+                      "reserved": $reserved
+                    }
+                """.trimIndent()
+            )
+            .`when`()
+            .post("/books")
+            .then()
+            .statusCode(201)
+    }*/
+
+    /*
+    @When("the user reserves the book {string}")
+    fun reserveBook(title: String) {
+        // Logique pour réserver le livre spécifié
+        given()
+            .contentType(ContentType.JSON)
+            .`when`()
+            .patch("/books/reserve/$title") // Assurez-vous d'ajuster l'URL selon votre API
+            .then()
+            .statusCode(200)
+    }*/
+
+    /*
+    @Then("the book {string} should be marked as reserved")
+    fun bookShouldBeMarkedAsReserved(title: String) {
+        // Logique pour vérifier que le livre est marqué comme réservé
+        val reservedStatus = // Obtenir le statut de réservation du livre (par exemple, en faisant une requête GET)
+            assertThat(reservedStatus).isEqualTo(true)
+    }*/
 
     @When("the user get all books")
     fun getAllBooks() {
@@ -86,7 +138,7 @@ class BookStepDefs {
             val actualBook = actualBooks[index] as Map<*, *>
             assertThat(actualBook["name"]).isEqualTo(expectedBook["name"])
             assertThat(actualBook["author"]).isEqualTo(expectedBook["author"])
-            assertThat(actualBook["reserved"]).isEqualTo(expectedBook["reserved"].toString().toBoolean())
+            assertThat(actualBook["reserved"].toString()).isEqualTo(expectedBook["reserved"])
         }
     }
 
