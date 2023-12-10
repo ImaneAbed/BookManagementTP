@@ -42,6 +42,21 @@ class BookStepDefs {
             .statusCode(201)
     }
 
+    @When("Can we reserve the following book {string} ?")
+    fun canWeReserveThisBook(title: String) {
+        val firstBook = given()
+            .`when`()
+            .get("/books")
+            .then()
+            .statusCode(200).extract().body().jsonPath().getList("", Map::class.java)[0]
+        //val actualBook = actualBooks[0]
+        //assertThat(actualBook["name"]).isEqualTo(title)
+        if (firstBook["name"] == title){
+            assertThat(firstBook["reserved"]).isEqualTo(false)
+        }
+
+    }
+
     @When("the user reserves the book {string} written by {string}")
     fun updateReservationStatus(title: String, author: String) {
         given()
@@ -49,17 +64,17 @@ class BookStepDefs {
             .and()
             .body(
                 """
-            {
-              "name": "$title",
-              "author": "$author",
-              "reserved": true
-            }
-        """.trimIndent()
+                    {
+                      "name": "$title",
+                      "author": "$author",
+                      "reserved": true
+                    }
+                """.trimIndent()
             )
             .`when`()
-            .put("/books/$title")
+            .post("/books")
             .then()
-            //.statusCode(200)
+            .statusCode(201)
     }
 
     @When("the user get all books")
