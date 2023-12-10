@@ -18,7 +18,6 @@ class BookDAO(private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate
                 )
             }
     }
-
     override fun createBook(book: Book) {
         namedParameterJdbcTemplate
             .update("INSERT INTO BOOK (title, author, reserved) values (:title, :author, :reserved)", mapOf(
@@ -27,14 +26,13 @@ class BookDAO(private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate
                 "reserved" to book.reserved
             ))
     }
-
     override fun updateBook(book: Book){
         if (!book.reserved) {
             namedParameterJdbcTemplate
                 .update(
                     "UPDATE BOOK SET reserved = :reserved WHERE title = :title", mapOf(
                         "title" to book.name,
-                        "reserved" to book.reserved
+                        "reserved" to true
                     )
                 )
         }

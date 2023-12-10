@@ -17,14 +17,12 @@ class BookController(
         return bookUseCase.getAllBooks()
             .map { it.toDto() }
     }
-
     @CrossOrigin
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun addBook(@RequestBody bookDTO: BookDTO) {
         bookUseCase.addBook(bookDTO.toDomain())
     }
-
     @CrossOrigin
     @PostMapping("/{bookName}/reserve")
     @ResponseStatus(HttpStatus.CREATED)

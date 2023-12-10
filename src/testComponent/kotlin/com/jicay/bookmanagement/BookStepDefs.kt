@@ -42,6 +42,7 @@ class BookStepDefs {
             .statusCode(201)
     }
 
+    // We are not able to test all lines, so we simulate (test only the first one)
     @When("Can we reserve the following book {string} ?")
     fun canWeReserveThisBook(title: String) {
         val firstBook = given()
@@ -54,9 +55,9 @@ class BookStepDefs {
         if (firstBook["name"] == title){
             assertThat(firstBook["reserved"]).isEqualTo(false)
         }
-
     }
 
+    // We are not able to update the reservation statue only, so we add a new line
     @When("the user reserves the book {string} written by {string}")
     fun updateReservationStatus(title: String, author: String) {
         given()
@@ -85,7 +86,6 @@ class BookStepDefs {
             .then()
             .statusCode(200)
     }
-
 
     @Then("the list should contains the following books in the same order")
     fun shouldHaveListOfBooks(payload: List<Map<String, Any>>) {

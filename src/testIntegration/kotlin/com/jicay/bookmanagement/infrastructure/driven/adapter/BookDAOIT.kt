@@ -39,8 +39,6 @@ class BookDAOIT {
         )
     }
 
-
-
     @Test
     fun `get all books from db`() {
         // GIVEN
@@ -82,6 +80,31 @@ class BookDAOIT {
         assertThat(res[0]["id"] is Int).isTrue()
         assertThat(res[0]["title"]).isEqualTo("Les_misérables")
         assertThat(res[0]["author"]).isEqualTo("Victor_Hugo")
+    }
+
+    @Test
+    fun `update a books from db`() {
+        // GIVEN
+        performQuery(
+            // language=sql
+            """
+               insert into book (title, author, reserved)
+               values 
+                   ('Hamlet', 'Shakespeare', false),
+                   ('Les_fleurs_du_mal', 'Beaudelaire', false),
+                   ('Harry_Potter', 'Rowling', false);
+            """.trimIndent())
+
+        // WHEN
+        bookDAO.updateBook(Book("Harry_Potter", "Rowling"))
+        val res = bookDAO.getAllBooks()
+
+        // THEN
+        assertThat(res).containsExactlyInAnyOrder(
+            Book("Hamlet", "Shakespeare"),
+            Book("Les_fleurs_du_mal", "Beaudelaire"),
+            Book("Harry_Potter", "Rowling", true)
+        )
     }
 
     protected fun performQuery(sql: String): List<Map<String, Any>> {

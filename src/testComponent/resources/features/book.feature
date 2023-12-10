@@ -13,10 +13,11 @@ Feature: the user can create and retrieve the books
     When the user creates the book "Inferno" written by "Dante"
     And Can we reserve the following book "Inferno" ?
     And the user reserves the book "Inferno" written by "Dante"
+    And the user reserves the book "Inferno" written by "Dante"
     And the user get all books
     Then the list should contains the following books in the same order
       | name | author | reserved |
       | Inferno | Dante | false |
       | Inferno | Dante | true |
-
-
+      | Inferno | Dante | true |
+    # We test only the first line, so the code is not very relevant

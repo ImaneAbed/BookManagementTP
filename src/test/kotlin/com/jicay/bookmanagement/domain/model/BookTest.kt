@@ -8,7 +8,6 @@ import assertk.assertions.isInstanceOf
 import org.junit.jupiter.api.Test
 
 class BookTest {
-
     @Test
     fun emptyTitle(){
         //Arrange
@@ -20,8 +19,6 @@ class BookTest {
             .isInstanceOf(Exception::class)
             .hasMessage("empty title")
     }
-
-    //author ""
     @Test
     fun emptyAuthor(){
         //Arrange
@@ -33,7 +30,6 @@ class BookTest {
             .isInstanceOf(Exception::class)
             .hasMessage("empty author")
     }
-
     @Test
     fun defaultReserved(){
         //Arrange

@@ -11,7 +11,6 @@ data class BookDTO(val name: String, val author: String, var reserved: Boolean =
         )
     }
 }
-
 fun Book.toDto() = BookDTO(
     name = this.name,
     author = this.author,
